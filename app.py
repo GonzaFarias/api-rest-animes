@@ -32,7 +32,7 @@ class AnimeSchema(ma.Schema):
 anime_schema = AnimeSchema()
 animes_schema = AnimeSchema(many=True)
 
-#Establecemos los estados
+# Establecemos los estados
 anime_status = {"Finalizado", "Emisión"}
 
 # Creamos la ruta para obtener todos los animes
@@ -79,7 +79,7 @@ def add_anime():
         # Convertir título a minúsculas para comparar con títulos existentes
         title_lower = title.lower()
 
-        #Se realizan correcciones en caso de escribir mal el estado
+        # Se realizan correcciones en caso de escribir mal el estado
         if status == 'emisión' or status == 'emision':
             status = 'Emisión'
         elif status == 'finalizado':
@@ -116,7 +116,7 @@ def update_anime(id):
         title = request.json['title']
         status = request.json['status']
         
-        #Se realizan correcciones en caso de escribir mal el estado        
+        # Se realizan correcciones en caso de escribir mal el estado        
         if status == 'emisión' or status == 'emision':
             status = 'Emisión'
         elif status == 'finalizado':
