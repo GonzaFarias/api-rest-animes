@@ -32,6 +32,9 @@ class AnimeSchema(ma.Schema):
 anime_schema = AnimeSchema()
 animes_schema = AnimeSchema(many=True)
 
+#Establecemos los estados
+anime_status = {"Finalizado", "Emisión"}
+
 # Creamos la ruta para obtener todos los animes
 @app.route('/animes', methods=['GET'])
 def get_animes():
@@ -76,7 +79,13 @@ def add_anime():
         # Convertir título a minúsculas para comparar con títulos existentes
         title_lower = title.lower()
 
-        if status not in ['Emisión', 'Finalizado']:
+        #Se realizan correcciones en caso de escribir mal el estado
+        if status == 'emisión' or status == 'emision':
+            status = 'Emisión'
+        elif status == 'finalizado':
+            status = 'Finalizado' 
+
+        if status not in anime_status:
             return jsonify({'error': 'El estado debe ser "Emisión" o "Finalizado"'}), 400
 
         anime = Anime.query.filter(func.lower(Anime.title) == title_lower).first()
@@ -106,8 +115,14 @@ def update_anime(id):
 
         title = request.json['title']
         status = request.json['status']
+        
+        #Se realizan correcciones en caso de escribir mal el estado        
+        if status == 'emisión' or status == 'emision':
+            status = 'Emisión'
+        elif status == 'finalizado':
+            status = 'Finalizado'    
 
-        if status not in ['Emisión', 'Finalizado']:
+        if status not in anime_status:
             return jsonify({'error': 'El estado debe ser "Emisión" o "Finalizado"'}), 400
 
         anime_with_title = Anime.query.filter_by(title=title).first()
@@ -194,3 +209,4 @@ def handle_server_error(error):
 # Inicializamos la aplicación
 if __name__ == '__main__':
     app.run(debug=True)
+
